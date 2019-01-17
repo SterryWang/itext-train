@@ -27,7 +27,6 @@ public class PdfTableGenerator {
 	private BaseColor borderColor = DEF_BORDER_COLOR;
 	private BaseColor hCellBackgroundColor = DEF_HCELL_BACKGROUNDCOLOR;
 	private float tableBorderWidth = DEF_TABLE_BORDER_WIDTH;
-	
 
 	public BaseColor getBorderColor() {
 		return borderColor;
@@ -53,6 +52,15 @@ public class PdfTableGenerator {
 		this.tableBorderWidth = tableBorderWidth;
 	}
 
+	/**
+	 * 初始化表格
+	 * 
+	 * @param columnCounts
+	 *            设置表格列数
+	 * @param colSpans
+	 *            设置每一列的列宽，不设置则取默认值
+	 * @throws Exception
+	 */
 	public void initTable(int columnCounts, ArrayList<Integer> colSpans) throws Exception {
 		PdfPTable newtable = new PdfPTable(columnCounts);// 创建有columnsCounts列的pdf表格
 		this.table = newtable;
@@ -60,7 +68,7 @@ public class PdfTableGenerator {
 			for (int integer : colSpans) {
 				this.colSpans.add(integer);
 			}
-		} else if (colSpans.size() != columnCounts) {
+		} else if (colSpans != null && colSpans.size() != columnCounts) {
 
 			throw new Exception("colSpans setting  does not match columnCounts setting!");
 
@@ -74,6 +82,12 @@ public class PdfTableGenerator {
 
 	}
 
+	/**
+	 * 按行插入表格表头，此方法和addTHeaderCell()方法可二选一使用
+	 * 
+	 * @param cells
+	 * @throws Exception
+	 */
 	public void addTHeadByRow(List<PdfPCell> cells) throws Exception {
 
 		if (ColumnsNum != cells.size()) {
@@ -91,6 +105,12 @@ public class PdfTableGenerator {
 
 	}
 
+	/**
+	 * 按行插入表格正文，此方法和addTBodyCell()方法可二选一使用
+	 * 
+	 * @param cells
+	 * @throws Exception
+	 */
 	public void addTBodyByRow(List<PdfPCell> cells) throws Exception {
 
 		if (ColumnsNum != cells.size()) {
@@ -103,23 +123,39 @@ public class PdfTableGenerator {
 			formatTBodyCell(cells.get(i));
 
 			table.addCell(cells.get(i));
+			
 
 		}
 
 	}
 
-	
-	public PdfPCell createHCell(String content, Font contentFont) {
-		PdfPCell cell = new PdfPCell(new Phrase((content), contentFont));
+	/**
+	 * 按单元格添加表格主体单元格内容，设置内容字体
+	 * 
+	 * @param cellContext
+	 * @param textFont
+	 */
+	public void addTBodyCell(String cellContext, Font textFont) {
+		PdfPCell cell = createCell(cellContext, textFont);
+		formatTBodyCell(cell);
+		table.addCell(cell);
 
-		return cell;
 	}
 
-	public PdfPCell createBodyCell(String content, Font contentFont) {
-		PdfPCell cell;
+	/**
+	 * 按单元格 添加表格表头单元格，设置内容字体
+	 * 
+	 * @param cellContext
+	 * @param textFont
+	 */
+	public void addTHeaderCell(String cellContext, Font textFont) {
+		PdfPCell cell = createCell(cellContext, textFont);
+		formatTHeadCell(cell);
+		table.addCell(cell);
+	}
 
-		cell = new PdfPCell(new Phrase((content), contentFont));
-
+	public PdfPCell createCell(String content, Font contentFont) {
+		PdfPCell cell = new PdfPCell(new Phrase((content), contentFont));
 		return cell;
 	}
 
@@ -137,7 +173,7 @@ public class PdfTableGenerator {
 		cell.setBorderWidthBottom(tableBorderWidth);
 		cell.setBorderWidthLeft(tableBorderWidth);
 		cell.setBorderWidthRight(tableBorderWidth);
-		//单元格内容默认居中
+		// 单元格内容默认居中
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);//
 		cell.setVerticalAlignment(Element.ALIGN_CENTER);
 
@@ -155,10 +191,14 @@ public class PdfTableGenerator {
 		cell.setBorderWidthBottom(tableBorderWidth);
 		cell.setBorderWidthLeft(tableBorderWidth);
 		cell.setBorderWidthRight(tableBorderWidth);
-		//单元格内容默认居中
+		// 单元格内容默认居中
 		cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 		cell.setVerticalAlignment(Element.ALIGN_CENTER);
 
+	}
+
+	public PdfPTable getTable() {
+		return table;
 	}
 
 }

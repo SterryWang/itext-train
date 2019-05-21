@@ -2,15 +2,22 @@ package com.example.demoitext;
 
 import java.io.FileOutputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.support.ResourcePatternResolver;
+
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 
-import ch.qos.logback.core.joran.conditional.IfAction;
-
 public class ImageStampUtils {
+
+	private static final Logger log = LoggerFactory.getLogger(ImageStampUtils.class);
+
 	public static void main(String[] args) throws Exception {
 
 		// 获得pdf页数
@@ -71,7 +78,9 @@ public class ImageStampUtils {
 			}
 
 			// 添加图片
-			Image image = Image.getInstance(picPath);// 图片名称
+			// Image image = Image.getInstance(picPath);// 图片名称
+		
+			Image image =loadPic(picPath);
 
 			if (x == null || y == null) {
 				// 任意一个坐标不输入都使用默认位置
@@ -80,7 +89,7 @@ public class ImageStampUtils {
 				image.setAbsolutePosition((int) (width * x), (int) (height * y));
 
 			}
-           //如果不设定图片缩放比例，则固定图片大小
+			// 如果不设定图片缩放比例，则固定图片大小
 			if (scalePercentage != null) {
 				image.scalePercent(scalePercentage);
 			} else {
@@ -107,6 +116,30 @@ public class ImageStampUtils {
 			}
 
 		}
+
+	}
+
+	public static Image loadPic(String picPath) throws Exception {
+		Image image = null;
+		if (picPath == null) {
+			throw new Exception("图片路径不可以为空！");
+
+		} else if (picPath.indexOf("classpath") == 0) {
+			// 使用了classpath类路径
+			System.out.println("使用了classpath路径");
+			log.info("使用了classpath路径");
+			ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+			Resource resource = resolver.getResource(picPath);
+			System.out.println("通过相对路径获得的图片的绝对路径为：" + resource.getURI().toString());
+			System.out.println("通过相对路径获得的图片的绝对路径为：" + resource.getURL().toString());
+			image = Image.getInstance(resource.getURL());
+
+		} else {
+			log.info("使用了绝对路径！");
+			image = Image.getInstance(picPath);
+
+		}
+		return image;
 
 	}
 

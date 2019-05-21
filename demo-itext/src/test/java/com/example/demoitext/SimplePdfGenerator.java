@@ -86,8 +86,8 @@ public class SimplePdfGenerator {
 
 		document = (pageSize == null) ? new Document(DEF_PDF_PAGE_SIZE) : new Document(pageSize);
 
-		// 设置字体
-		BaseFont bf = BaseFont.createFont(getChineseFont() + ",1", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);// 注意这里有一个,1
+		// 设置字体"UniGB-UCS2-H"
+		BaseFont bf = BaseFont.createFont("STSongStd-Light" ,"UniGB-UCS2-H",BaseFont.NOT_EMBEDDED);// 注意这里有一个,1
 		titleFont = (titleFontSize == null) ? new Font(bf, DEF_TITLE_FONT_SIZE, Font.BOLD)
 				: new Font(bf, titleFontSize, Font.BOLD);
 		subtitleFont = (subtitleFontSize == null) ? new Font(bf, DEF_SUBTITLE_FONT_SIZE, Font.NORMAL)

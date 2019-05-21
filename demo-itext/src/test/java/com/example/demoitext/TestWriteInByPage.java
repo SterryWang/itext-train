@@ -132,7 +132,8 @@ public class TestWriteInByPage {
 		// 给pdf盖个章,大工告成
 		String src = noStampedPdfPath;
 		String dest = stampedPdfPath;
-		String picPath = "d:/sign.jpg";// 要插入的图章
+		//String picPath = "d:/sign.jpg";// 要插入的图章
+		String picPath = "classpath:static/sign.jpg";// 要插入的图章
 		int pageToStamp = 1;// 在第一页盖章
 		ImageStampUtils.addStamp(src, dest, picPath, pageToStamp, null, null, null);
 		System.out.println("pdf盖章完成！");

@@ -35,7 +35,7 @@ public class PdfProdTests {
 		// 实现A4纸页面 并且纵向排列（不设置则为横向
 		Document document = new Document(PageSize.A4);
 		// 设置字体
-		BaseFont bf = BaseFont.createFont(getChineseFont() + ",1", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);// 注意这里有一个,1
+		BaseFont bf = BaseFont.createFont("STSong-Light", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);// 注意这里有一个,1
 		Font titleFont = new Font(bf, 15, Font.BOLD);
 		Font subTitleFont = new Font(bf, 11, Font.NORMAL);
 		Font tableFont = new Font(bf, 9, Font.NORMAL);
@@ -78,6 +78,8 @@ public class PdfProdTests {
 	}
 
 	private static String getChineseFont() {
+		//BaseFont  chiBaseFont = BaseFont.createFont("STSong-Light",BaseFont.IDENTITY_H,BaseFont.NOT_EMBEDDED);    
+
 		String font1 = WINDOWS_FONTS;
 		// 判断系统类型，加载字体文件
 		String osName = getOsName();
